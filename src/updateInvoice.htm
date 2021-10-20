@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="bundle.css" />
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  <title>Visma example</title>
+</head>
+
+<style>
+  body {
+    background-color: lightblue;
+  }
+</style>
+
+<body>
+  <div class="jumbotron jumbotron-fluid" style="color: white; background-color: rgb(28, 16, 190);">
+    <div class="container">
+      <h1><strong>Visma eksempel</strong></h1>
+      <p>Opdatere data fra Vismas API</p>
+    </div>
+  </div>
+  <div id="app">
+    <h2>Opdatere Udarbejdet faktura</h2>
+    <input v-model.number="updateDraftInvoiceData.draftInvoiceNumber" placeholder="nummer" type="number" />
+    <input v-model="updateDraftInvoiceData.date" placeholder="ÅÅ-MM-DD" type="text" />
+    <input v-model="updateDraftInvoiceData.currency" placeholder="Valuta" type="text" />
+    <input v-model.number="updateDraftInvoiceData.paymentTerms.paymentTermsNumber" placeholder="Betalingsbetingelsesnummer" type="number" />
+    <input v-model.number="updateDraftInvoiceData.paymentTerms.daysOfCredit" placeholder="Kreditdage" type="number" />
+    <input v-model.number="updateDraftInvoiceData.customer.customerNumber" placeholder="kundenummer" type="number" />
+    <input v-model="updateDraftInvoiceData.recipient.name" placeholder="modtagerens navn" type="text" />
+    <input v-model="updateDraftInvoiceData.recipient.address" placeholder="modtagerens adresse" type="text" />
+    <input v-model="updateDraftInvoiceData.recipient.zip" placeholder="modtagerens postnummer" type="text" />
+    <input v-model="updateDraftInvoiceData.recipient.city" placeholder="modtagerens by" type="text" />
+    <input v-model="updateDraftInvoiceData.recipient.vatZone.name" placeholder="modtagerens momszonenavn" type="text" />
+    <input v-model.number="updateDraftInvoiceData.recipient.vatZone.vatZoneNumber" placeholder="modtagerens Momszonenummer" type="number" />
+    <input v-model.number="updateDraftInvoiceData.layout.layoutNumber" placeholder="Layoutnummer" type="number"/>
+    <button v-on:click="updateDraftInvoice()" class="btn btn-success">Opdater</button>
+    <div>{{updateMessage}}</div>
+
+  </div>
+
+  <script src="bundle.js"></script>
+</body>
+
+</html>

@@ -3,24 +3,622 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+  <link rel="stylesheet" type="text/css" href="bundle.css" />
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
-  <title>Hello app</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  <title>Visma example</title>
 </head>
 
+<style>
+  body {
+    background-color: lightblue;
+  }
+</style>
+
 <body>
-  <h1>Hello</h1>
+  <div class="jumbotron jumbotron-fluid" style="color: white; background-color: rgb(28, 16, 190);">
+    <div class="container">
+      <h1><strong>Visma eksempel</strong></h1>
+      <p>Hent kundedata fra Vismas API</p>
+    </div>
+  </div>
   <div id="app">
-    <input v-model="name" placeholder="Name">
-    <button v-on:click="sayHello()" class="btn btn-primary">Say hello</button>
-    <div>{{ greeting }}</div>
+    <h2>Kunderne</h2>
+    <button id="getAllButton" v-on:click="getAllCustomers()" class="btn btn-primary">Alle Kunder</button>
+
+     
+      
+        <table class="table-striped table-bordered table-hover">
+          <colgroup>
+            <col span="1" style="width: 8%;">
+            <col span="1" style="width: 13%;">
+            <col span="1" style="width: 13%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 6%;">
+         </colgroup>
+          <thead>
+            <tr>
+              <th>Kunde nr.</th>
+              <th>Adresse</th>
+              <th>By</th>
+              <th>Land</th>
+              <th>Email</th>
+              <th>Navn</th>
+              <th>Post Nr</th>
+            </tr>
+          </thead>
+          <tr v-for="customer in collection">
+            <td>{{collection.customer.customerNumber}}</td>
+            <td>{{collection.customer.address}}</td>
+            <td>{{collection.customer.city}}</td>
+            <td>{{collection.customer.country}}</td>
+            <td>{{collection.customer.email}}</td>
+            <td>{{collection.customer.name}}</td>
+            <td>{{collection.customer.zip}}</td>
+          </tr>
+        </table>
+      
+
+    <input v-model="customerNumberToGetBy" placeholder="Kundenummer" type="number" />
+    <button v-on:click="getByCustomerId(customerNumberToGetBy)" class="btn btn-primary">Get by id</button>
+    <div v-if="singleCustomer">
+      <table class="table-striped table-bordered table-hover">
+        <colgroup>
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 13%;">
+          <col span="1" style="width: 13%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 6%;">
+          <col span="1" style="width: 6%;">
+       </colgroup>
+        <thead>
+          <tr>
+            <th>Kunde nr.</th>
+            <th>Kundegruppe nr.</th>
+            <th>Valuta</th>
+            <th>Adresse</th>
+            <th>By</th>
+            <th>Land</th>
+            <th>Email</th>
+            <th>Navn</th>
+            <th>Moms zone nr.</th>
+            <th>Post Nr</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>{{singleCustomer.customerNumber}}</td>
+          <td>{{singleCustomer.customerGroup.customerGroupNumber}}</td>
+          <td>{{singleCustomer.currency}}</td>
+          <td>{{singleCustomer.address}}</td>
+          <td>{{singleCustomer.city}}</td>
+          <td>{{singleCustomer.country}}</td>
+          <td>{{singleCustomer.email}}</td>
+          <td>{{singleCustomer.name}}</td>
+          <td>{{singleCustomer.vatZone.vatZoneNumber}}</td>
+          <td>{{singleCustomer.zip}}</td>
+        </tr>
+      </table>
+    </div>
+    <div v-else>Ingen kunde</div>
+
+    <h2>Opdatere kunden</h2>
+    <input v-model.number="updateCustomerData.customerNumber" placeholder="Kundenummer" type="number" />
+    <input v-model="updateCustomerData.name" placeholder="Navn" type="text" />
+    <input v-model="updateCustomerData.currency" placeholder="Valuta" type="text" />
+    <input v-model="updateCustomerData.address" placeholder="Adresse" type="text" />
+    <input v-model="updateCustomerData.city" placeholder="By" type="text" />
+    <input v-model="updateCustomerData.country" placeholder="Land" type="text" />
+    <input v-model="updateCustomerData.email" placeholder="Valuta" type="text" />
+    <input v-model="updateCustomerData.zip" placeholder="Post nr." type="text" />
+    <input v-model.number="updateCustomerData.customerGroup.customerGroupNumber" placeholder="Kundegruppenummer" type="number"/>
+    <input v-model.number="updateCustomerData.paymentTerms.paymentTermsNumber" placeholder="Betalingsbetingelsesnummer" type="number"/>
+    <input v-model.number="updateCustomerData.vatZone.vatZoneNumber" placeholder="Momszonenummer" type="number"/>
+    <button v-on:click="updateCustomer()" class="btn btn-success">Opdater</button>
+    <div>{{updateMessage}}</div>
+
+    <h2>Valuta</h2>
+
+    <input v-model="currenciesGetByCode" placeholder="Koden" type="string" />
+    <button v-on:click="getByCode(currenciesGetByCode)" class="btn btn-primary">Via Kode</button>
+    <div v-if="singleCurrency">
+      <table class="table-striped table-bordered table-hover">
+        <colgroup>
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 13%;">
+       </colgroup>
+        <thead>
+          <tr>
+            <th>Navn</th>
+            <th>Kode</th>
+            <th>Isonummer</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>{{singleCurrency.name}}</td>
+          <td>{{singleCurrency.code}}</td>
+          <td>{{singleCurrency.isoNumber}}</td>
+        </tr>
+      </table>
+    </div>
+    <div v-else>Ingen Valuta</div>
+
+    <h2>Kundegruppe</h2>
+
+    <input v-model="customerGroupGetByNumber" placeholder="Gruppenummer" type="number" />
+    <button v-on:click="getByCustomerGroupNumber(customerGroupGetByNumber)" class="btn btn-primary">Via Gruppenummer</button>
+    <div v-if="singleCustomerGroup">
+      <table class="table-striped table-bordered table-hover">
+        <colgroup>
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 13%;">
+          <col span="1" style="width: 8%;">
+       </colgroup>
+        <thead>
+          <tr>
+            <th>Gruppenummer</th>
+            <th>Navn</th>
+            <th>Kontonummer</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>{{singleCustomerGroup.customerGroupNumber}}</td>
+          <td>{{singleCustomerGroup.name}}</td>
+          <td>{{singleCustomerGroup.account.accountNumber}}</td>
+        </tr>
+      </table>
+    </div>
+    <div v-else>Ingen Gruppe</div>
+
+    <h2>Udarbejdet Faktura</h2>
+
+    <input v-model="draftsInvoiceNumberToGetBy" placeholder="Udarbejdet Faktura" type="number" />
+    <button v-on:click="getByDraftInvoiceNumber(draftsInvoiceNumberToGetBy)" class="btn btn-primary">via udarbejdet fakturanummer</button>
+    <div v-if="singleDraftsInvoice">
+      <table class="table-striped table-bordered table-hover">
+        <colgroup>
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+       </colgroup>
+        <thead>
+          <tr>
+            <th>Udarbejdet fakturanummer</th>
+            <th>Dato</th>
+            <th>Valuta</th>
+            <th>Valutakurs</th>
+            <th>Nettobeløb</th>
+            <th>Nettobeløb i Valutakurs</th>
+            <th>Bruttobeløb</th>
+            <th>Bruttobeløb i Valutakurs</th>
+            <th>Momsbeløb</th>
+            <th>Afrundingsbeløb</th>
+            <th>Betaltpris i Valutakurs</th>
+            <th>Aflevringsdato</th>
+            <th>Betalingsbetingelsesnummer</th>
+            <th>Kreditdage</th>
+            <th>Kundenummer</th>
+            <th>Kundens navn</th>
+            <th>Kundens adresse</th>
+            <th>Kundens postnummer</th>
+            <th>Kundens by</th>
+            <th>Kundens momszonenavn</th>
+            <th>Kundens momszonenummer</th>
+            <th>Layoutnummer</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>{{singleDraftsInvoice.draftInvoiceNumber}}</td>
+          <td>{{singleDraftsInvoice.date}}</td>
+          <td>{{singleDraftsInvoice.currency}}</td>
+          <td>{{singleDraftsInvoice.exchangeRate}}</td>
+          <td>{{singleDraftsInvoice.netAmount}}</td>
+          <td>{{singleDraftsInvoice.netAmountInBaseCurrency}}</td>
+          <td>{{singleDraftsInvoice.grossAmount}}</td>
+          <td>{{singleDraftsInvoice.grossAmountInBaseCurrency}}</td>
+          <td>{{singleDraftsInvoice.vatAmount}}</td>
+          <td>{{singleDraftsInvoice.roundingAmount}}</td>
+          <td>{{singleDraftsInvoice.costPriceInBaseCurrency}}</td>
+          <td>{{singleDraftsInvoice.dueDate}}</td>
+          <td>{{singleDraftsInvoice.paymentTerms.paymentTermsNumber}}</td>
+          <td>{{singleDraftsInvoice.paymentTerms.daysOfCredit}}</td>
+          <td>{{singleDraftsInvoice.customer.customerNumber}}</td>
+          <td>{{singleDraftsInvoice.recipient.name}}</td>
+          <td>{{singleDraftsInvoice.recipient.address}}</td>
+          <td>{{singleDraftsInvoice.recipient.zip}}</td>
+          <td>{{singleDraftsInvoice.recipient.city}}</td>
+          <td>{{singleDraftsInvoice.recipient.vatZone.name}}</td>
+          <td>{{singleDraftsInvoice.recipient.vatZone.vatZoneNumber}}</td>
+          <td>{{singleDraftsInvoice.layout.layoutNumber}}</td>
+        </tr>
+      </table>
+      <a :href="'http://localhost:3002/index.htm?draftInvoiceNumber='+singleDraftsInvoice.draftInvoiceNumber + '&paymentTermsNumber='+singleDraftsInvoice.paymentTerms.paymentTermsNumber + 
+      '&daysOfCredit='+singleDraftsInvoice.paymentTerms.daysOfCredit + '&customerNumber='+singleDraftsInvoice.customer.customerNumber + 
+      '&name='+singleDraftsInvoice.recipient.name + '&address='+singleDraftsInvoice.recipient.address + 
+      '&zip='+singleDraftsInvoice.recipient.zip + '&city='+singleDraftsInvoice.recipient.city + 
+      '&vatZoneName='+singleDraftsInvoice.recipient.vatZone.name + '&vatZoneNumber='+singleDraftsInvoice.recipient.vatZone.vatZoneNumber +
+      '&layoutNumber='+singleDraftsInvoice.layout.layoutNumber">Opdatere</a>
+    </div>
+    <div v-else>Ingen Udarbejdet Faktura</div>
+
+    <h2>Opdatere en Udarbejdet Faktura</h2>
+    <input v-model.number="updateDraftInvoiceData.draftInvoiceNumber" placeholder="nummer" type="number" />
+    <input v-model="updateDraftInvoiceData.date" placeholder="ÅÅ-MM-DD" type="text" />
+    <input v-model="updateDraftInvoiceData.currency" placeholder="Valuta" type="text" />
+    <input v-model.number="updateDraftInvoiceData.paymentTerms.paymentTermsNumber" placeholder="Betalingsbetingelsesnummer" type="number" />
+    <input v-model.number="updateDraftInvoiceData.paymentTerms.daysOfCredit" placeholder="Kreditdage" type="number" />
+    <input v-model.number="updateDraftInvoiceData.customer.customerNumber" placeholder="kundenummer" type="number" />
+    <input v-model="updateDraftInvoiceData.recipient.name" placeholder="modtagerens navn" type="text" />
+    <input v-model="updateDraftInvoiceData.recipient.address" placeholder="modtagerens adresse" type="text" />
+    <input v-model="updateDraftInvoiceData.recipient.zip" placeholder="modtagerens postnummer" type="text" />
+    <input v-model="updateDraftInvoiceData.recipient.city" placeholder="modtagerens by" type="text" />
+    <input v-model="updateDraftInvoiceData.recipient.vatZone.name" placeholder="modtagerens momszonenavn" type="text" />
+    <input v-model.number="updateDraftInvoiceData.recipient.vatZone.vatZoneNumber" placeholder="modtagerens Momszonenummer" type="number" />
+    <input v-model.number="updateDraftInvoiceData.layout.layoutNumber" placeholder="Layoutnummer" type="number"/>
+    <button v-on:click="updateDraftInvoice()" class="btn btn-success">Opdater</button>
+    <div>{{updateMessage}}</div>
+
+    <h2>Skab en udarbejdet faktura</h2>
+    <h6>Dato</h6>
+    <input v-model="addDraftsInvoiceData.date" placeholder="ÅÅ-MM-DD" type="text" />
+    <h6>Valuta</h6>
+    <input v-model="addDraftsInvoiceData.currency" placeholder="Valuta" type="text" />
+    <h6>Betalingsbetingelsesnummer (1 = 8 dage, 2 = 30 dage, 3 = 14 dage)</h6>
+    <input v-model.number="addDraftsInvoiceData.paymentTerms.paymentTermsNumber" placeholder="Betalingsbetingelsesnummer" type="number" />
+    <h6>Kreditdage</h6>
+    <input v-model.number="addDraftsInvoiceData.paymentTerms.daysOfCredit" placeholder="Kreditdage" type="number" />
+    <h6>Kundenummer</h6>
+    <input v-model.number="addDraftsInvoiceData.customer.customerNumber" placeholder="kundenummer" type="number" />
+    <h6>Modtagerens navn</h6>
+    <input v-model="addDraftsInvoiceData.recipient.name" placeholder="modtagerens navn" type="text" />
+    <h6>Modtagerens adresse</h6>
+    <input v-model="addDraftsInvoiceData.recipient.address" placeholder="modtagerens adresse" type="text" />
+    <h6>Modtagerens postnummer</h6>
+    <input v-model="addDraftsInvoiceData.recipient.zip" placeholder="modtagerens postnummer" type="text" />
+    <h6>Modtagerens by</h6>
+    <input v-model="addDraftsInvoiceData.recipient.city" placeholder="modtagerens by" type="text" />
+    <h6>Modtagerens momszonenavn</h6>
+    <input v-model="addDraftsInvoiceData.recipient.vatZone.name" placeholder="modtagerens momszonenavn" type="text" />
+    <h6>Modtagerens Momszonenummer (1 = Domestic, 2 = EU, 3 = aboard, 4 = Domestic exempt VAT, 8 = Austria, 9 = Belgium, 10 = Bulgaria, 11 = Cyprus, 12 = Czech Republic, 13 = Germany, 14 = Estonia, 15 = Spain, 16 = Finland, 17 = France, 18 = Greece, 19 = Croatia, 20 = Hungary, 21 = Ireland, 22 = Italy, 23 = Lithuania)</h6>
+    <input v-model.number="addDraftsInvoiceData.recipient.vatZone.vatZoneNumber" placeholder="modtagerens Momszonenummer" type="number" />
+    <h6>Layoutnummer</h6>
+    <input v-model.number="addDraftsInvoiceData.layout.layoutNumber" placeholder="Layoutnummer" type="number"/>
+    <button v-on:click="addDraftsInvoice()" class="btn btn-success">Create</button>
+    <div>{{addMessage}}</div>
+
+    <h2>Bogført Faktura</h2>
+
+    <input v-model="bookedInvoiceNumberToGetBy" placeholder="Bogført Faktura" type="number" />
+    <button v-on:click="getByBookedInvoiceNumber(bookedInvoiceNumberToGetBy)" class="btn btn-primary">via bogført fakturanummer</button>
+    <div v-if="singleBookedInvoice">
+      <table class="table-striped table-bordered table-hover">
+        <colgroup>
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 8%;">
+       </colgroup>
+        <thead>
+          <tr>
+            <th>Booked fakturanummer</th>
+            <th>Dato</th>
+            <th>Valuta</th>
+            <th>Valutakurs</th>
+            <th>Nettobeløb</th>
+            <th>Nettobeløb i Valutakurs</th>
+            <th>Bruttobeløb</th>
+            <th>Bruttobeløb i Valutakurs</th>
+            <th>Momsbeløb</th>
+            <th>Afrundingsbeløb</th>
+            <th>Resten</th>
+            <th>Resten i Valutakurs</th>
+            <th>Aflevringsdato</th>
+            <th>Betalingsbetingelsesnummer</th>
+            <th>Kundenummer</th>
+            <th>Kayoutnummer</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>{{singleBookedInvoice.bookedInvoiceNumber}}</td>
+          <td>{{singleBookedInvoice.date}}</td>
+          <td>{{singleBookedInvoice.currency}}</td>
+          <td>{{singleBookedInvoice.exchangeRate}}</td>
+          <td>{{singleBookedInvoice.netAmount}}</td>
+          <td>{{singleBookedInvoice.netAmountInBaseCurrency}}</td>
+          <td>{{singleBookedInvoice.grossAmount}}</td>
+          <td>{{singleBookedInvoice.grossAmountInBaseCurrency}}</td>
+          <td>{{singleBookedInvoice.vatAmount}}</td>
+          <td>{{singleBookedInvoice.roundingAmount}}</td>
+          <td>{{singleBookedInvoice.remainder}}</td>
+          <td>{{singleBookedInvoice.remainderInBaseCurrency}}</td>
+          <td>{{singleBookedInvoice.dueDate}}</td>
+          <td>{{singleBookedInvoice.paymentTerms.paymentTermsNumber}}</td>
+          <td>{{singleBookedInvoice.customer.customerNumber}}</td>
+          <td>{{singleBookedInvoice.layout.layoutNumber}}</td>
+        </tr>
+      </table>
+    </div>
+    <div v-else>Ingen Bogført Faktura</div>
+
+    <h2>Medarbejder</h2>
+
+    <input v-model="employeeByNumber" placeholder="Medarbejdernummer" type="number" />
+    <button v-on:click="getByEmployeeNumber(employeeByNumber)" class="btn btn-primary">Via medarbejdernummer</button>
+    <div v-if="singleEmployee">
+      <table class="table-striped table-bordered table-hover">
+        <colgroup>
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+       </colgroup>
+        <thead>
+          <tr>
+            <th>Medarbejdernummer</th>
+            <th>Navn</th>
+            <th>E-mail</th>
+            <th>Telefonnummer</th>
+            <th>Spærret?</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>{{singleEmployee.employeeNumber}}</td>
+          <td>{{singleEmployee.name}}</td>
+          <td>{{singleEmployee.email}}</td>
+          <td>{{singleEmployee.phone}}</td>
+          <td>{{singleEmployee.barred}}</td>
+        </tr>
+      </table>
+    </div>
+    <div v-else>Ingen Medarbejder</div>
+
+    <h2>Layout</h2>
+
+    <input v-model="layoutByNumber" placeholder="Layoutnummer" type="number" />
+    <button v-on:click="getByLayoutNumber(layoutByNumber)" class="btn btn-primary">Via layoutnummer</button>
+    <div v-if="singleLayout">
+      <table class="table-striped table-bordered table-hover">
+        <colgroup>
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+       </colgroup>
+        <thead>
+          <tr>
+            <th>Layoutnummer</th>
+            <th>Navn</th>
+            <th>Slettet?</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>{{singleLayout.layoutNumber}}</td>
+          <td>{{singleLayout.name}}</td>
+          <td>{{singleLayout.deleted}}</td>
+        </tr>
+      </table>
+    </div>
+    <div v-else>Ingen layout</div>
+
+    <h2>Betallingsbetingelse</h2>
+
+    <input v-model="paymentTermsByNumber" placeholder="Betalingsbetingelsesnummer" type="number" />
+    <button v-on:click="getByPaymentTermsNumber(paymentTermsByNumber)" class="btn btn-primary">Via Betalingsbetingelsesnummer</button>
+    <div v-if="singlePaymentTerm">
+      <table class="table-striped table-bordered table-hover">
+        <colgroup>
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+       </colgroup>
+        <thead>
+          <tr>
+            <th>Betalingsbetingelsesnummer</th>
+            <th>Kreditdage</th>
+            <th>forklaring</th>
+            <th>Navn</th>
+            <th>Betalt i procent</th>
+            <th>Hvor meget der mangles i procent</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>{{singlePaymentTerm.paymentTermsNumber}}</td>
+          <td>{{singlePaymentTerm.daysOfCredit}}</td>
+          <td>{{singlePaymentTerm.description}}</td>
+          <td>{{singlePaymentTerm.name}}</td>
+          <td>{{singlePaymentTerm.percentageForPrepaidAmount}}</td>
+          <td>{{singlePaymentTerm.percentageForRemainderAmount}}</td>
+        </tr>
+      </table>
+    </div>
+    <div v-else>Ingen Betalingsbetingelse</div>
+
+    <h2>Produktgruppe</h2>
+
+    <input v-model="productGroupByNumber" placeholder="Produktgruppenummer" type="number" />
+    <button v-on:click="getByProductGroupNumber(productGroupByNumber)" class="btn btn-primary">Via Produktgruppenummer</button>
+    <div v-if="singleProductGroup">
+      <table class="table-striped table-bordered table-hover">
+        <colgroup>
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+       </colgroup>
+        <thead>
+          <tr>
+            <th>Produktgruppenummer</th>
+            <th>Navn</th>
+            <th>Lageraktiveret?</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>{{singleProductGroup.productGroupNumber}}</td>
+          <td>{{singleProductGroup.name}}</td>
+          <td>{{singleProductGroup.inventoryEnabled}}</td>
+        </tr>
+      </table>
+    </div>
+    <div v-else>Ingen Produktgruppe</div>
+
+    <h2>Produkt</h2>
+
+    <input v-model="productByNumber" placeholder="Produktnummer" type="number" />
+    <button v-on:click="getByProductNumber(productByNumber)" class="btn btn-primary">Via Produktnummer</button>
+    <div v-if="singleProduct">
+      <table class="table-striped table-bordered table-hover">
+        <colgroup>
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 15%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 10%;">
+       </colgroup>
+        <thead>
+          <tr>
+            <th>Produktnummer</th>
+            <th>Forklaring</th>
+            <th>Navn</th>
+            <th>Pris</th>
+            <th>Produktgruppe</th>
+            <th>Anbefalet pris</th>
+            <th>Salgspris</th>
+            <th>Barkode</th>
+            <th>Spæret?</th>
+            <th>Sidste opdatering</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>{{singleProduct.productNumber}}</td>
+          <td>{{singleProduct.description}}</td>
+          <td>{{singleProduct.name}}</td>
+          <td>{{singleProduct.costPrice}}</td>
+          <td>{{singleProduct.productGroup.productGroupNumber}}</td>
+          <td>{{singleProduct.recommendedPrice}}</td>
+          <td>{{singleProduct.salesPrice}}</td>
+          <td>{{singleProduct.barCode}}</td>
+          <td>{{singleProduct.barred}}</td>
+          <td>{{singleProduct.lastUpdated}}</td>
+        </tr>
+      </table>
+    </div>
+    <div v-else>Intet Produkt</div>
+
+    <h2>Levandører</h2>
+
+    <input v-model="supplierByNumber" placeholder="Leverandørnummer" type="number" />
+    <button v-on:click="getBySupplierNumber(supplierByNumber)" class="btn btn-primary">Via Leverandørnummer</button>
+    <div v-if="singleSupplier">
+      <table class="table-striped table-bordered table-hover">
+        <colgroup>
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 15%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 8%;">
+          <col span="1" style="width: 10%;">
+       </colgroup>
+        <thead>
+          <tr>
+            <th>Adresse</th>
+            <th>Bankkonto</th>
+            <th>Spærret?</th>
+            <th>By</th>
+            <th>Kontakter</th>
+            <th>Virksomhedsidentifikationsnummer</th>
+            <th>Land</th>
+            <th>Valuta</th>
+            <th>Fakturatekst</th>
+            <th>E-mail</th>
+            <th>Navn</th>
+            <th>Telefonnummer</th>
+            <th>Leverandørnummer</th>
+            <th>Postnummer</th>
+            <th>Self</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>{{singleSupplier.address}}</td>
+          <td>{{singleSupplier.bankAccount}}</td>
+          <td>{{singleSupplier.barred}}</td>
+          <td>{{singleSupplier.city}}</td>
+          <td>{{singleSupplier.contacts}}</td>
+          <td>{{singleSupplier.corporateIdentificationNumber}}</td>
+          <td>{{singleSupplier.country}}</td>
+          <td>{{singleSupplier.currency}}</td>
+          <td>{{singleSupplier.defaultInvoiceText}}</td>
+          <td>{{singleSupplier.email}}</td>
+          <td>{{singleSupplier.name}}</td>
+          <td>{{singleSupplier.phone}}</td>
+          <td>{{singleSupplier.supplierNumber}}</td>
+          <td>{{singleSupplier.zip}}</td>
+          <td>{{singleSupplier.self}}</td>
+        </tr>
+      </table>
+    </div>
+    <div v-else>Intet Levandører</div>
+
+    <h2>Enheder</h2>
+
+    <input v-model="unitGetByNumber" placeholder="Enhedsnummer" type="number" />
+    <button v-on:click="getByUnitNumber(unitGetByNumber)" class="btn btn-primary">Via enhedsnummer</button>
+    <div v-if="singleUnit">
+      <table class="table-striped table-bordered table-hover">
+        <colgroup>
+          <col span="1" style="width: 10%;">
+          <col span="1" style="width: 10%;">
+       </colgroup>
+        <thead>
+          <tr>
+            <th>Enhedsnummer</th>
+            <th>Navn</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>{{singleUnit.unitNumber}}</td>
+          <td>{{singleUnit.name}}</td>
+        </tr>
+      </table>
+    </div>
+    <div v-else>Ingen enhed</div>
+
   </div>
 
   <script src="bundle.js"></script>
