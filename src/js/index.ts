@@ -161,6 +161,7 @@ interface IUnit {
     name: string
 }
 
+// 2021-10-27: Denne skaber forbindelse til URL'en til economic databasen
 let baseUrl: string = "https://restapi.e-conomic.com"
 
 new Vue({
@@ -265,6 +266,7 @@ new Vue({
         getByCustomerId(customerNumber: number) {
             let url: string = baseUrl + "/customers" + "/" + customerNumber
             axios.get<ICustomer>(url, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -283,6 +285,7 @@ new Vue({
         updateCustomer() {
             let url: string = baseUrl + "/customers/" + this.updateCustomerData.customerNumber
             axios.put<ICustomer>(url, this.updateCustomerData, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -302,6 +305,7 @@ new Vue({
         getByCode(code: string) {
             let url: string = baseUrl + "/currencies" + "/" + code
             axios.get<ICurrencies>(url, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -320,6 +324,7 @@ new Vue({
         getByCustomerGroupNumber(customerGroupNumber: number) {
             let url: string = baseUrl + "/customer-groups" + "/" + customerGroupNumber
             axios.get<ICustomerGroups>(url, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -338,6 +343,7 @@ new Vue({
         getByDraftInvoiceNumber(draftInvoiceNumber: number) {
             let url: string = baseUrl + "/invoices/drafts" + "/" + draftInvoiceNumber
             axios.get<IDraftsInvoices>(url, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -355,6 +361,7 @@ new Vue({
         // Skaber en bogført faktura, og headeren nedenunder bruges til at få adgang til Vismas restapi til Michaels data fra hans app.
         addDraftsInvoice() {
             axios.post<IDraftsInvoices>(baseUrl + "/invoices/drafts", this.addDraftsInvoiceData, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -375,6 +382,7 @@ new Vue({
         updateDraftInvoice() {
             let url: string = baseUrl + "/invoices/drafts/" + this.updateDraftInvoiceData.draftInvoiceNumber
             axios.put<IDraftsInvoices>(url, this.updateDraftInvoiceData, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -394,6 +402,7 @@ new Vue({
         getByBookedInvoiceNumber(bookedInvoiceNumber: number) {
             let url: string = baseUrl + "/invoices/booked" + "/" + bookedInvoiceNumber
             axios.get<IBookedInvoices>(url, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -412,6 +421,7 @@ new Vue({
         getByEmployeeNumber(employeeNumber: number) {
             let url: string = baseUrl + "/employees" + "/" + employeeNumber
             axios.get<IEmployees>(url, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -430,6 +440,7 @@ new Vue({
         getByLayoutNumber(layoutNumber: number) {
             let url: string = baseUrl + "/layouts" + "/" + layoutNumber
             axios.get<ILayouts>(url, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -448,6 +459,7 @@ new Vue({
         getByPaymentTermsNumber(paymentTermsNumber: number) {
             let url: string = baseUrl + "/payment-terms" + "/" + paymentTermsNumber
             axios.get<IPaymentTerms>(url, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -466,6 +478,7 @@ new Vue({
         getByProductGroupNumber(productGroupNumber: number) {
             let url: string = baseUrl + "/product-groups" + "/" + productGroupNumber
             axios.get<IProductGroups>(url, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -484,6 +497,7 @@ new Vue({
         getByProductNumber(productNumber: number) {
             let url: string = baseUrl + "/products" + "/" + productNumber
             axios.get<IProduct>(url, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
@@ -513,6 +527,7 @@ new Vue({
         getByUnitNumber(unitNumber: number) {
             let url: string = baseUrl + "/units" + "/" + unitNumber
             axios.get<IUnit>(url, {
+                // 2021-10-27 I header indsætter man token'erne, så der gives adgang til databasen
                 headers: {
                     'X-AppSecretToken': 'Nc5GgaQfU1BFerxYMkZt8HSRtjjVon3MueTTgWj9B2k1',
                     'X-AgreementGrantToken': 'iHEjAGnzPqtNMQkG1r5h4ESTE38EpuTwBpNrGot2bss1',
