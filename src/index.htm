@@ -30,6 +30,7 @@
   </div>
   <div id="app">
     <h2>Kunderne</h2>
+    <!--2021-10-27 Knappen her henter en samling af kunder, men den virker ikke-->
     <button id="getAllButton" v-on:click="getAllCustomers()" class="btn btn-primary">Alle Kunder</button>
 
      
@@ -66,7 +67,7 @@
           </tr>
         </table>
       
-
+    <!--2021-10-27 Knappen henter kun en kunde via det kundenummer der indtastes-->
     <input v-model="customerNumberToGetBy" placeholder="Kundenummer" type="number" />
     <button v-on:click="getByCustomerId(customerNumberToGetBy)" class="btn btn-primary">Get by id</button>
     <div v-if="singleCustomer">
@@ -112,6 +113,7 @@
     </div>
     <div v-else>Ingen kunde</div>
 
+    <!--2021-10-27 Knappen opdaterer en kunde-->
     <h2>Opdatere kunden</h2>
     <input v-model.number="updateCustomerData.customerNumber" placeholder="Kundenummer" type="number" />
     <input v-model="updateCustomerData.name" placeholder="Navn" type="text" />
@@ -129,6 +131,7 @@
 
     <h2>Valuta</h2>
 
+    <!--2021-10-27 Knappen henter kun en valuta via det koden der indtastes-->
     <input v-model="currenciesGetByCode" placeholder="Koden" type="string" />
     <button v-on:click="getByCode(currenciesGetByCode)" class="btn btn-primary">Via Kode</button>
     <div v-if="singleCurrency">
@@ -155,6 +158,7 @@
 
     <h2>Kundegruppe</h2>
 
+    <!--2021-10-27 Knappen henter kun en kundegruppe via det kundegruppenummer der indtastes-->
     <input v-model="customerGroupGetByNumber" placeholder="Gruppenummer" type="number" />
     <button v-on:click="getByCustomerGroupNumber(customerGroupGetByNumber)" class="btn btn-primary">Via Gruppenummer</button>
     <div v-if="singleCustomerGroup">
@@ -182,6 +186,7 @@
 
     <h2>Udarbejdet Faktura</h2>
 
+    <!--2021-10-27 Knappen henter kun en udarbejdet faktura via det nummer der indtastes-->
     <input v-model="draftsInvoiceNumberToGetBy" placeholder="Udarbejdet Faktura" type="number" />
     <button v-on:click="getByDraftInvoiceNumber(draftsInvoiceNumberToGetBy)" class="btn btn-primary">via udarbejdet fakturanummer</button>
     <div v-if="singleDraftsInvoice">
@@ -260,6 +265,7 @@
     </div>
     <div v-else>Ingen Udarbejdet Faktura</div>
 
+    <!--2021-10-27 Knappen opdatere en udarbejdet faktura-->
     <h2>Opdatere en Udarbejdet Faktura</h2>
     <input v-model.number="updateDraftInvoiceData.draftInvoiceNumber" placeholder="nummer" type="number" />
     <input v-model="updateDraftInvoiceData.date" placeholder="ÅÅ-MM-DD" type="text" />
@@ -277,6 +283,7 @@
     <button v-on:click="updateDraftInvoice()" class="btn btn-success">Opdater</button>
     <div>{{updateMessage}}</div>
 
+    <!--2021-10-27 Knappen skaber en udarbejdet faktura-->
     <h2>Skab en udarbejdet faktura</h2>
     <h6>Dato</h6>
     <input v-model="addDraftsInvoiceData.date" placeholder="ÅÅ-MM-DD" type="text" />
@@ -307,6 +314,7 @@
 
     <h2>Bogført Faktura</h2>
 
+    <!--2021-10-27 Knappen henter kun en bogført faktura via det nummer der indtastes-->
     <input v-model="bookedInvoiceNumberToGetBy" placeholder="Bogført Faktura" type="number" />
     <button v-on:click="getByBookedInvoiceNumber(bookedInvoiceNumberToGetBy)" class="btn btn-primary">via bogført fakturanummer</button>
     <div v-if="singleBookedInvoice">
@@ -370,6 +378,7 @@
 
     <h2>Medarbejder</h2>
 
+    <!--2021-10-27 Knappen henter kun en medatbjeder via det medarbejdernummer der indtastes-->
     <input v-model="employeeByNumber" placeholder="Medarbejdernummer" type="number" />
     <button v-on:click="getByEmployeeNumber(employeeByNumber)" class="btn btn-primary">Via medarbejdernummer</button>
     <div v-if="singleEmployee">
@@ -403,6 +412,7 @@
 
     <h2>Layout</h2>
 
+    <!--2021-10-27 Knappen henter kun en layout via det layoutnummer der indtastes-->
     <input v-model="layoutByNumber" placeholder="Layoutnummer" type="number" />
     <button v-on:click="getByLayoutNumber(layoutByNumber)" class="btn btn-primary">Via layoutnummer</button>
     <div v-if="singleLayout">
@@ -430,6 +440,7 @@
 
     <h2>Betallingsbetingelse</h2>
 
+    <!--2021-10-27 Knappen henter kun en betalingsbetingelse via det nummer der indtastes-->
     <input v-model="paymentTermsByNumber" placeholder="Betalingsbetingelsesnummer" type="number" />
     <button v-on:click="getByPaymentTermsNumber(paymentTermsByNumber)" class="btn btn-primary">Via Betalingsbetingelsesnummer</button>
     <div v-if="singlePaymentTerm">
@@ -466,6 +477,7 @@
 
     <h2>Produktgruppe</h2>
 
+    <!--2021-10-27 Knappen henter kun en produktgruppe via det nummer der indtastes-->
     <input v-model="productGroupByNumber" placeholder="Produktgruppenummer" type="number" />
     <button v-on:click="getByProductGroupNumber(productGroupByNumber)" class="btn btn-primary">Via Produktgruppenummer</button>
     <div v-if="singleProductGroup">
@@ -493,6 +505,7 @@
 
     <h2>Produkt</h2>
 
+    <!--2021-10-27 Knappen henter kun et produkt via det produktnummer der indtastes-->
     <input v-model="productByNumber" placeholder="Produktnummer" type="number" />
     <button v-on:click="getByProductNumber(productByNumber)" class="btn btn-primary">Via Produktnummer</button>
     <div v-if="singleProduct">
@@ -540,6 +553,7 @@
 
     <h2>Levandører</h2>
 
+    <!--2021-10-27 Knappen henter kun en levandør via det nummer der indtastes, men der ingen levandører i databasen, så den virker ikke-->
     <input v-model="supplierByNumber" placeholder="Leverandørnummer" type="number" />
     <button v-on:click="getBySupplierNumber(supplierByNumber)" class="btn btn-primary">Via Leverandørnummer</button>
     <div v-if="singleSupplier">
@@ -597,6 +611,7 @@
 
     <h2>Enheder</h2>
 
+    <!--2021-10-27 Knappen henter kun en enhed via det enhedsnummer der indtastes-->
     <input v-model="unitGetByNumber" placeholder="Enhedsnummer" type="number" />
     <button v-on:click="getByUnitNumber(unitGetByNumber)" class="btn btn-primary">Via enhedsnummer</button>
     <div v-if="singleUnit">
